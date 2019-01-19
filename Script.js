@@ -1,8 +1,9 @@
 var Game_map = [[0,0,0],
 		 		[0,0,0],
 		 		[0,0,0]];
-var wait = false
-var Nofmoove = 0
+var wait = false;
+var Nofmoove = 0;
+var GamEnd = true;
 function setup() {
 
 	createCanvas(500, 500);
@@ -13,8 +14,8 @@ function setup() {
 
 function draw() {
 	if (wait==false){
-		bot_Play();
-		wait = true;
+			bot_Play();
+			wait = true;
 	}
 
 }
@@ -32,9 +33,15 @@ function drawTable(x,y){
 }
 
 function mouseReleased() {
-
+	if (GamEnd){
 		wait = Where();
+		GamEnd = WinOrLose()
+	}else{
+		
 		print(Game_map)
+		print('______________game_end______________')
+	}
+		
 
 }
 function Where() {
@@ -145,29 +152,55 @@ function cross(x,y){
 	}
 }
 
-/*
+
 function WinOrLose(){
-	if (Nofmoove>=3){
-		for (var y = 0; y<2; y++){
+		
+	for (var y = 0; y<=2; y++){
+		if (Game_map[y][0]!=0){
 			if (Game_map[y][0]==Game_map[y][1] && Game_map[y][0]==Game_map[y][2]){
-				if (y==1){
+				
+				if (Game_map[y][0]==1){
 					print("You Win!");
+				
 				}else{
 
 					print("You Lose!")
 				}
+				return
 			}
 		}
-		for (var x = 0; x<2; x++){
-			if (Game_map[0][x]==Game_map[1][x] && Game_map[0][0]==Game_map[y][2]){
-				if (y==1){
+	}
+	for (var x = 0; x<=2; x++){
+		if (Game_map[0][x]!=0){
+			if (Game_map[0][x]==Game_map[1][x] && Game_map[0][x]==Game_map[2][x]){
+				
+				if (Game_map[0][x]==1){
 					print("You Win!");
+				
 				}else{
 
 					print("You Lose!")
 				}
+				return
 			}
 		}
+	}
+	if (Game_map.every(equality)){
+
+		print("equality!")
+		return
+	}
+	return true
 }
+function equality(Nember){
+	if (Number.isInteger(Nember)){
+		
+		return Nember>0
 
-*/
+	}else{
+		if (Nember.every(equality)){
+			return true
+		}
+		
+	}
+}
