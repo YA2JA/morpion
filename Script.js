@@ -2,20 +2,23 @@ var Game_map = [[0,0,0],
 		 		[0,0,0],
 		 		[0,0,0]];
 var GamEnd = true;
-doIt = true;
+
+
+
+//##############Drawing###############
 function setup() {
 
 	createCanvas(500, 500);
 	background(220);
 	drawTable(25,25)
-	bot_Play();
+	//bot_Play();
 
 }
-
-function draw() {
-
+function draw(){
+	if (GamEnd){
+	GamEnd = WinOrLose();
+	}
 }
-
 function drawTable(x,y){
 
 	for (var Y = 0; Y < 3; Y++) {
@@ -28,27 +31,27 @@ function drawTable(x,y){
 
 }
 
-function mouseReleased() {
-	if (GamEnd){
-
-		Where();
-		GamEnd = WinOrLose();
-		if (GamEnd){
-
-			bot_Play();
-		}
-	
+function cross(x,y){
+	if (x <= 2 || y <= 2) {
+		line(
+			35+150*x,
+			35+150*y,
+			35+150*x+130,
+			35+150*y+130);
+		line(
+			35+150*x+130,
+			35+150*y,
+			35+150*x,
+			35+150*y+130);
+		Game_map[y][x] = 2;
 	}else{
 
-		if (doIt){
-			print(Game_map);
-			print('______________game_end______________');
-			doIt = false; 
-		}
-	}
-		
+		return("Error, You try to exit from the map");
 
+	}
 }
+
+
 function Where() {
 	if (mouseY<175){
 
@@ -121,6 +124,10 @@ function Where() {
 	}
 }
 
+//#####################################
+
+
+//###############Plaeyrs###############
 function bot_Play(){
 
 		do {
@@ -136,38 +143,40 @@ function bot_Play(){
 
 }
 
-function cross(x,y){
-	if (x <= 2 || y <= 2) {
-		line(
-			35+150*x,
-			35+150*y,
-			35+150*x+130,
-			35+150*y+130);
-		line(
-			35+150*x+130,
-			35+150*y,
-			35+150*x,
-			35+150*y+130);
-		Game_map[y][x] = 2;
-	}else{
+function mouseReleased() {
+	
+	if (GamEnd){
+		Where();
+		GamEnd = WinOrLose();
+		if (GamEnd){
 
-		return("Error, You try to exit from the map");
-
+			bot_Play();
+		}
 	}
 }
 
 
+//###################Win tests###################
 function WinOrLose(){
 
 	if (horizontal()){
 
 		if (vartical()){
 
+			if(diagonale()){
+				
 				if (Game_map.every(equality)){
 
 					print("equality!");
+					print(Game_map);
+					print('______________game_end______________');
 					return false
 				}
+
+			}else{
+
+				return false
+			}
 		}else{
 
 			return false
@@ -178,21 +187,12 @@ function WinOrLose(){
 
 }
 
-
-
 function horizontal(){
 
 	for (var y = 0; y<=2; y++){
 		if (Game_map[y][0]!=0){
 			if (Game_map[y][0]==Game_map[y][1] && Game_map[y][0]==Game_map[y][2]){
-				
-				if (Game_map[y][0]==1){
-					print("You Win!");
-
-				}else{
-
-					print("You Lose!");
-				}
+				Who(y,0);
 				return false
 			}
 
@@ -206,14 +206,23 @@ function vartical() {
 	for (var x = 0; x<=2; x++){
 		if (Game_map[0][x]!=0){
 			if (Game_map[0][x]==Game_map[1][x] && Game_map[0][x]==Game_map[2][x]){
-				
-				if (Game_map[0][x]==1){
-					print("You Win!");
 
-				}else{
+				Who(0,x);
+				return false
+			}
+		}
+	}
+	return true
 
-					print("You Lose!");
-				}
+}
+function diagonale(){
+
+	for (var x = 0; x<=2; x+=2){
+		if (Game_map[0][x]!=0){
+			if (Game_map[0][x]==Game_map[1][1] && Game_map[0][x]==Game_map[2][2-x*1])
+			{
+
+				Who(0,x);
 				return false
 			}
 		}
@@ -233,3 +242,18 @@ function equality(Nember){
 		
 	}
 }
+function Who(y,x){
+
+	if (Game_map[y][x]==1){
+
+		print("You Win!");
+
+	}else{
+
+		print("You Lose!");
+	}
+	print(Game_map);
+	print('______________game_end______________');
+
+}
+//##############################################
