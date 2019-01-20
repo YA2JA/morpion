@@ -3,22 +3,20 @@ var Game_map = [[0,0,0],
 		 		[0,0,0]];
 var GamEnd = true;
 
-
-
 //##############Drawing###############
 function setup() {
-
 	createCanvas(500, 500);
 	background(220);
 	drawTable(25,25)
-	//bot_Play();
-
+	bot_Play();
 }
+
 function draw(){
 	if (GamEnd){
-	GamEnd = WinOrLose();
+		GamEnd = WinOrLose();
 	}
 }
+
 function drawTable(x,y){
 
 	for (var Y = 0; Y < 3; Y++) {
@@ -28,7 +26,6 @@ function drawTable(x,y){
 			rect(x+150*X,y+150*Y,150,150);
 		}
 	}
-
 }
 
 function cross(x,y){
@@ -44,84 +41,48 @@ function cross(x,y){
 			35+150*x,
 			35+150*y+130);
 		Game_map[y][x] = 2;
-	}else{
-
-		return("Error, You try to exit from the map");
-
 	}
 }
 
+function circle(x,y){
 
-function Where() {
-	if (mouseY<175){
+	var X_index = 0;
+	var Y_index = 0;
+	
+	
+	for (var Where_X = 175; Where_X<=475; Where_X+=150){
 
-		if (mouseX < 175) {
+		if (x<=Where_X){
 
-			if (Game_map[0][0]==0){
+			position_img_x = Where_X-75
 
-				ellipse(100, 100, 130, 130);
-				Game_map[0][0] = 1;
-			}
+			break;
 
-		}else if (mouseX > 175 && mouseX < 325){
-
-			if (Game_map[0][1]==0){
-
-				ellipse(250, 100, 130, 130);
-				Game_map[0][1] = 1;
-
-			}
-
-		}else if (mouseX > 325 && mouseX < 475){
-
-
-			if (Game_map[0][2]==0){
-				ellipse(400, 100, 130, 130);
-				Game_map[0][2] = 1;
-			}
 		}
+		X_index++;
+
 	}
-	if (mouseY>175 && mouseY<325){
 
-		if (mouseX < 175) {
-			if (Game_map[1][0]==0){
-				ellipse(100, 250, 130, 130);
-				Game_map[1][0] = 1;
-			}
+	for (var Where_Y = 175; Where_Y<=475; Where_Y+=150){
 
-		}else if (mouseX > 175 && mouseX < 325){
-			if (Game_map[1][1]==0){
-				ellipse(250, 250, 130, 130);
-				Game_map[1][1] = 1;
-			}
+		if (y<=Where_Y){
 
-		}else if (mouseX > 325 && mouseX < 475){
-			if (Game_map[1][2]==0){
-				ellipse(400, 250, 130, 130);
-				Game_map[1][2] = 1;
-			}
+			position_img_y = Where_Y-75
+
+			break;
+
 		}
-	}
-	if (mouseY>325){
+		Y_index++;
 
-		if (mouseX < 175) {
-			if (Game_map[2][0]==0){
-				ellipse(100, 400, 130, 130);
-				Game_map[2][0] = 1;
-			}
-
-		}else if (mouseX > 175 && mouseX < 325){
-			if (Game_map[2][1]==0){
-				ellipse(250, 400, 130, 130);
-				Game_map[2][1] = 1;
-			}
-		}else if (mouseX > 325 && mouseX < 475){
-			if (Game_map[2][2]==0){
-				ellipse(400, 400, 130, 130);
-				Game_map[2][2] = 1;
-			}
-		}
 	}
+
+	if (Game_map[Y_index][X_index]==0){
+		Game_map[Y_index][X_index] = 1;
+		ellipse(position_img_x,position_img_y, 130,130);
+		return true
+	}
+	return false
+
 }
 
 //#####################################
@@ -130,25 +91,24 @@ function Where() {
 //###############Plaeyrs###############
 function bot_Play(){
 
-		do {
+		while (true){
+
 			var x = Math.round(Math.random()*2);
 			var y = Math.round(Math.random()*2);
 
 			if (Game_map[y][x]===0){
-				cross(x,y)
+				cross(x,y);
 				return
 			}
 
-		}while (true)
-
+		}
 }
 
 function mouseReleased() {
-	
 	if (GamEnd){
-		Where();
+		PlaeyrMoov = circle(mouseX,mouseY);
 		GamEnd = WinOrLose();
-		if (GamEnd){
+		if (GamEnd && PlaeyrMoov){
 
 			bot_Play();
 		}
@@ -184,7 +144,6 @@ function WinOrLose(){
 		return true
 	}
 	return false
-
 }
 
 function horizontal(){
@@ -199,8 +158,8 @@ function horizontal(){
 		}
 	}
 	return true
-
 }
+
 function vartical() {
 
 	for (var x = 0; x<=2; x++){
@@ -213,14 +172,13 @@ function vartical() {
 		}
 	}
 	return true
-
 }
+
 function diagonale(){
 
 	for (var x = 0; x<=2; x+=2){
 		if (Game_map[0][x]!=0){
-			if (Game_map[0][x]==Game_map[1][1] && Game_map[0][x]==Game_map[2][2-x*1])
-			{
+			if (Game_map[0][x]==Game_map[1][1] && Game_map[0][x]==Game_map[2][2-x*1]){
 
 				Who(0,x);
 				return false
@@ -228,8 +186,8 @@ function diagonale(){
 		}
 	}
 	return true
-
 }
+
 function equality(Nember){
 	if (Number.isInteger(Nember)){
 		
@@ -242,6 +200,7 @@ function equality(Nember){
 		
 	}
 }
+
 function Who(y,x){
 
 	if (Game_map[y][x]==1){
@@ -254,6 +213,5 @@ function Who(y,x){
 	}
 	print(Game_map);
 	print('______________game_end______________');
-
 }
 //##############################################
