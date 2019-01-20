@@ -1,22 +1,18 @@
 var Game_map = [[0,0,0],
 		 		[0,0,0],
 		 		[0,0,0]];
-var wait = false;
-var Nofmoove = 0;
 var GamEnd = true;
+doIt = true;
 function setup() {
 
 	createCanvas(500, 500);
 	background(220);
 	drawTable(25,25)
+	bot_Play();
 
 }
 
 function draw() {
-	if (wait==false){
-			bot_Play();
-			wait = true;
-	}
 
 }
 
@@ -34,12 +30,21 @@ function drawTable(x,y){
 
 function mouseReleased() {
 	if (GamEnd){
-		wait = Where();
-		GamEnd = WinOrLose()
+
+		Where();
+		GamEnd = WinOrLose();
+		if (GamEnd){
+
+			bot_Play();
+		}
+	
 	}else{
-		
-		print(Game_map)
-		print('______________game_end______________')
+
+		if (doIt){
+			print(Game_map);
+			print('______________game_end______________');
+			doIt = false; 
+		}
 	}
 		
 
@@ -114,7 +119,6 @@ function Where() {
 			}
 		}
 	}
-	return false;
 }
 
 function bot_Play(){
@@ -129,7 +133,7 @@ function bot_Play(){
 			}
 
 		}while (true)
-		Nofmoove++
+
 }
 
 function cross(x,y){
@@ -154,43 +158,68 @@ function cross(x,y){
 
 
 function WinOrLose(){
-		
+
+	if (horizontal()){
+
+		if (vartical()){
+
+				if (Game_map.every(equality)){
+
+					print("equality!");
+					return false
+				}
+		}else{
+
+			return false
+		}
+		return true
+	}
+	return false
+
+}
+
+
+
+function horizontal(){
+
 	for (var y = 0; y<=2; y++){
 		if (Game_map[y][0]!=0){
 			if (Game_map[y][0]==Game_map[y][1] && Game_map[y][0]==Game_map[y][2]){
 				
 				if (Game_map[y][0]==1){
 					print("You Win!");
-				
+
 				}else{
 
-					print("You Lose!")
+					print("You Lose!");
 				}
-				return
+				return false
 			}
+
 		}
 	}
+	return true
+
+}
+function vartical() {
+
 	for (var x = 0; x<=2; x++){
 		if (Game_map[0][x]!=0){
 			if (Game_map[0][x]==Game_map[1][x] && Game_map[0][x]==Game_map[2][x]){
 				
 				if (Game_map[0][x]==1){
 					print("You Win!");
-				
+
 				}else{
 
-					print("You Lose!")
+					print("You Lose!");
 				}
-				return
+				return false
 			}
 		}
 	}
-	if (Game_map.every(equality)){
-
-		print("equality!")
-		return
-	}
 	return true
+
 }
 function equality(Nember){
 	if (Number.isInteger(Nember)){
