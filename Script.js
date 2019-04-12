@@ -1,21 +1,16 @@
-var Game_map = [[0,0,0],
-		 		[0,0,0],
-		 		[0,0,0]];
-var GamEnd = true;
-
+var Game_map = null;
+var GamEnd = null;
+var Win = 0;
+var Lose = 0;
+Nmoves = 0;
 //##############Drawing###############
 function setup() {
-	createCanvas(500, 500);
-	background(220);
-	drawTable(25,25)
-	bot_Play();
+	createCanvas(500,500);
+	background(255);
+	StartingNewGame();
+	
 }
 
-function draw(){
-	if (GamEnd){
-		GamEnd = WinOrLose();
-	}
-}
 
 function drawTable(x,y){
 
@@ -25,7 +20,7 @@ function drawTable(x,y){
 
 			rect(x+150*X,y+150*Y,150,150);
 		}
-	}
+	} 
 }
 
 function cross(x,y){
@@ -48,8 +43,7 @@ function circle(x,y){
 
 	var X_index = 0;
 	var Y_index = 0;
-	
-	
+	Nmoves++;
 	for (var Where_X = 175; Where_X<=475; Where_X+=150){
 
 		if (x<=Where_X){
@@ -73,7 +67,6 @@ function circle(x,y){
 
 		}
 		Y_index++;
-
 	}
 
 	if (Game_map[Y_index][X_index]==0){
@@ -84,37 +77,44 @@ function circle(x,y){
 	return false
 
 }
-
 //#####################################
 
 
 //###############Plaeyrs###############
 function bot_Play(){
+	if (Nmoves==1){
+		analyse_map();
+
+	}else{
 
 		while (true){
 
-			var x = Math.round(Math.random()*2);
-			var y = Math.round(Math.random()*2);
+				var x = Math.round(Math.random()*2);
+				var y = Math.round(Math.random()*2);
 
-			if (Game_map[y][x]===0){
-				cross(x,y);
-				return
+				if (Game_map[y][x]===0){
+					cross(x,y);
+					return
+				}
+
 			}
 
-		}
+	}
 }
 
 function mouseReleased() {
+
 	if (GamEnd){
+
 		PlaeyrMoov = circle(mouseX,mouseY);
 		GamEnd = WinOrLose();
 		if (GamEnd && PlaeyrMoov){
 
 			bot_Play();
+			GamEnd = WinOrLose();
 		}
 	}
 }
-
 
 //###################Win tests###################
 function WinOrLose(){
@@ -151,6 +151,7 @@ function horizontal(){
 	for (var y = 0; y<=2; y++){
 		if (Game_map[y][0]!=0){
 			if (Game_map[y][0]==Game_map[y][1] && Game_map[y][0]==Game_map[y][2]){
+
 				Who(y,0);
 				return false
 			}
@@ -206,12 +207,97 @@ function Who(y,x){
 	if (Game_map[y][x]==1){
 
 		print("You Win!");
+		Win++;
 
 	}else{
 
 		print("You Lose!");
+		Lose++;
 	}
 	print(Game_map);
-	print('______________game_end______________');
+	print('_______'+str(Lose)+'_______game_end_______'+str(Win)+'_______');
 }
 //##############################################
+
+//################## MENU ######################
+
+function StartingNewGame(){
+
+	drawTable(25,25);
+	Game_map =  [[0,0,0],
+	[0,0,0],
+	[0,0,0]];
+	GamEnd = true;
+	Nmoves = 0;
+	cross(1,1);
+
+}
+//#############################################
+function analyse_map(){
+	
+
+		if(Game_map[1][0] == 1){
+
+
+			cross(0,2);
+			return
+
+		}
+
+		if(Game_map[1][2] == 1){
+
+
+			cross(2,0);
+			return
+
+		}
+
+		if(Game_map[0][1] == 1){
+
+
+			cross(0,0);
+			return
+
+		}
+
+		if (Game_map[2][1] == 1){
+
+			cross(2,2);
+			return
+
+		}else{
+
+			while (true){
+
+				var x = Math.round(Math.random()*2);
+				var y = Math.round(Math.random()*2);
+
+				if (Game_map[y][x]===0){
+					cross(x,y);
+					return
+				}
+
+			}
+
+
+		}
+
+	}
+
+
+function Bot(){
+
+	for(x = 0; x<=2;x++){
+
+		
+		for(y = 0;x<=2;y++){
+
+
+
+
+		}
+
+	}
+	
+
+}

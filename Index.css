@@ -1,0 +1,25 @@
+body{
+
+	background-color: black;
+	display: flex;
+
+	justify-content: center;
+
+	align-items: center;
+
+}
+
+.restart_btn{
+
+	font-size: 16px;
+	border-color: yellow;
+
+
+}
+.Menu{
+
+	size: 10%, 10%;
+	border-color: yellow;
+	border-radius: 2px;
+
+}
